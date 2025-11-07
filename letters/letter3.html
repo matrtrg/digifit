@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter for Love</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Segoe UI", Roboto, sans-serif;
+            font-size: 20px;
+            margin: 0;
+            color: #444;
+            background: linear-gradient(to bottom, #ffd1dc, hwb(351 30% 21%)); /* Soft pink gradient */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #letter-container {
+            width: 80%;
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f4a7b9;
+            line-height: 1.8;
+            text-align: left;
+            position: relative;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        #typedtext p {
+            margin: 10px 0;
+            text-indent: 30px;
+        }
+
+        /* Blinking cursor effect */
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 18px;
+            background: hsl(340, 97%, 43%);
+            margin-left: 5px;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #letter-container {
+                width: 90%;
+                font-size: 18px;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #letter-container {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="letter-container">
+        <div id="typedtext"></div>
+    </div>
+
+    <script>
+        var aText = [
+    "10/05/2024",
+    "Hi love. This letter is all about your <span style='color:#ff4081; font-weight:bold;'>strength</span>.",
+    "Gusto kong simulan ‘to by looking back sa mga moments na nakita kong gaano ka katatag.",
+    "Sa simula pa lang, I already noticed your <span style='color:#ff1493;'>resilience</span>—yung paraan mo ng pagharap sa kahit anong challenge with a smile and a strong heart.",
+    "Napansin ko kung paano mo hinaharap yung mga problema mo, hindi lang basta para matapos na, kundi para talaga matuto at maging <span style='color:#ff4081;'>better</span>.",
+    "Habang mas nakikilala kita, mas lalo kong na-appreciate yung tapang mo.",
+    "You don’t just endure things, you rise above them.",
+    "Your words, your actions, and even the way you handle tough days, they all show how <span style='color:#ff69b4;'>strong</span> you truly are.",
+    "Pero love, hindi lang naman about struggles ang strength mo—nakikita ko rin ito sa way mo magmahal, magbigay, at magpahalaga.",
+    "I love how you choose to be <span style='color:#ff1493;'>hopeful</span> kahit na mahirap,",
+    "paano mo pinipiling maging <span style='color:#ff4081;'>kind</span> kahit minsan unfair ang mundo,",
+    "at paano mo pinaninindigan kung ano ang tama at <span style='color:#ff69b4;'>totoo</span>, kahit challenging.",
+    "And that’s one of the million reasons why I admire you so much.",
+    "Ang sarap mong mahalin, love. And I want you to know na kahit anong mangyari,",
+    "nandito ako, always ready to remind you how <span style='color:#ff1493;'>amazing</span> and <span style='color:#ff4081;'>strong</span> you are.",
+    "Super <span style='color:#ff4081;'>proud</span> ako sa’yo, love. And I’m beyond grateful na ikaw ang minamahal ko.",
+    "<span style='color:#ff1493; font-size: 22px; font-weight: bold;'>ILOVEEEYOUSOMUCCCHH ❤</span>"
+];
+
+        var iSpeed = 50;
+        var iIndex = 0;
+        var iArrLength = aText[0].length;
+        var iTextPos = 0;
+        var sContents = "";
+        var iRow;
+
+        function typewriter() {
+            var destination = document.getElementById("typedtext");
+            sContents = "";
+            iRow = Math.max(0, iIndex);
+
+            // Add previous lines as full paragraphs
+            for (var j = 0; j < iIndex; j++) {
+                sContents += "<p>" + aText[j] + "</p>";
+            }
+
+            // Add current typing line with blinking cursor
+            sContents += "<p>" + aText[iIndex].substring(0, iTextPos) + "<span class='cursor'></span></p>";
+            destination.innerHTML = sContents;
+
+            if (iTextPos++ === iArrLength) {
+                iTextPos = 0;
+                iIndex++;
+                if (iIndex !== aText.length) {
+                    iArrLength = aText[iIndex].length;
+                    setTimeout(typewriter, 300);
+                }
+            } else {
+                setTimeout(typewriter, iSpeed);
+            }
+        }
+
+        typewriter();
+    </script>
+</body>
+</html>

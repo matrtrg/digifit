@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <iframe width="0" height="0" src="../music/die.mp3" frameborder="0" allowfullscreen></iframe>
+    <title>Letter for Love</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Segoe UI", Roboto, sans-serif;
+            font-size: 20px;
+            margin: 0;
+            color: #444;
+            background: linear-gradient(to bottom, #ffeb3b, #ffd700); /* Soft yellow gradient */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #letter-container {
+            width: 80%;
+            max-width: 600px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #fbc02d;
+            line-height: 1.8;
+            text-align: left;
+            position: relative;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        #typedtext p {
+            margin: 10px 0;
+            text-indent: 30px;
+        }
+
+        /* Blinking cursor effect */
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 18px;
+            background: #fbc02d;
+            margin-left: 5px;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #letter-container {
+                width: 90%;
+                font-size: 18px;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #letter-container {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="letter-container">
+        <div id="typedtext"></div>
+    </div>
+
+    <script>
+        var aText = [
+            "9/20/2024",
+            "Hi love! This letter is for the things I admire most about you—",
+            "Your loving heart, not just for others, but also for yourself.",
+            "Alam mo ba kung gaano kaganda ang puso mo? Yung lambing mo, pag-aalaga mo, at ang pagmamahal mo sa ibang tao are the things i love about you.",
+            "but the one thing i love the most about you, ay yung hindi mo pagkalimot mahalin at respetuhin ang sarili mo.",
+            "You know your worth, and you never let anyone take that away from you.",
+            "You love deeply, but you never lose yourself in the process",
+            "At yan ang isa sa pinakamahalagang bagay na natutunan ko mula sa’yo.",
+            "There’s something so beautiful about the way you carry yourself, how you stay kind but firm,",
+            "how you give so much love pero hindi mo hinahayaang maubos ka.",
+            "That’s what makes you so amazing, love.",
+            "Kaya please, never stop being the strong, loving person that you are.",
+            "Always remember that I see you, I appreciate you, and I’ll always remind you how worthy you are.",
+            "Kahit anong mangyari, nandito lang ako para ipaalala sa’yo na mahalaga ka, hindi lang sa akin, kundi sa buong mundo.",
+            "<span style='color:#fbc02d; font-size: 22px; font-weight: bold;'>Mahal kita sobra, love. Keep shining! ❤</span>"
+        ];
+
+        var iSpeed = 50;
+        var iIndex = 0;
+        var iArrLength = aText[0].length;
+        var iTextPos = 0;
+        var sContents = "";
+        var iRow;
+
+        function typewriter() {
+            var destination = document.getElementById("typedtext");
+            sContents = "";
+            iRow = Math.max(0, iIndex);
+
+            // Add previous lines as full paragraphs
+            for (var j = 0; j < iIndex; j++) {
+                sContents += "<p>" + aText[j] + "</p>";
+            }
+
+            // Add current typing line with blinking cursor
+            sContents += "<p>" + aText[iIndex].substring(0, iTextPos) + "<span class='cursor'></span></p>";
+            destination.innerHTML = sContents;
+
+            if (iTextPos++ === iArrLength) {
+                iTextPos = 0;
+                iIndex++;
+                if (iIndex !== aText.length) {
+                    iArrLength = aText[iIndex].length;
+                    setTimeout(typewriter, 300);
+                }
+            } else {
+                setTimeout(typewriter, iSpeed);
+            }
+        }
+
+        typewriter();
+    </script>
+</body>
+</html>

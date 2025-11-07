@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <iframe width="0" height="0" src="music/letter1.mp3" frameborder="0" allowfullscreen></iframe>
+    <title>Letter for Love</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Segoe UI", Roboto, sans-serif;
+            font-size: 20px;
+            margin: 0;
+            color: #5c4033;
+            background: linear-gradient(to bottom, #ffe0b2, #ffcc80); /* Pastel orange gradient */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #letter-container {
+            width: 80%;
+            max-width: 600px;
+            background: #fff7f0;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ffb74d;
+            line-height: 1.8;
+            text-align: left;
+            position: relative;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        #typedtext p {
+            margin: 10px 0;
+            text-indent: 30px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 18px;
+            background: #ffb74d;
+            margin-left: 5px;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            #letter-container {
+                width: 90%;
+                font-size: 18px;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #letter-container {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="letter-container">
+        <div id="typedtext"></div>
+    </div>
+
+    <script>
+        var aText = [
+            "9/20/2024",
+            "hi love,",
+            "it’s been a long time since i started this project. it’s been 9 months now, and a lot has happened between us.",
+            "good things and bad things, things we didn’t expect would happen to us.",
+            "this year has been tough for both of us. adulting has really been trying to belittle us in one way or another.",
+            "our social cues, the people we met this year, and the person we’ve each become are different from who we were last year.",
+            "but alam mo love, even with all the struggles and joys, i’m just glad there’s <span style='color:#ff9800; font-weight:bold;'>you</span>.",
+            "there’s this girl who greets me good morning, sends me kissing gifs, plays with me, watches movies with me, plays games with me, travels with me, cuddles with me, and so much more.",
+            "we’ve gone through a lot this year, love, and i know there were times we both got tired, even times when we got separated, but we always managed to get through it together.",
+            "i’m really, really proud of us.",
+            "now that a new year is just around the corner, i want to keep being with you every day, every year, every century, for the rest of my life.",
+            "<span style='color:#ff9800; font-size:22px; font-weight:bold;'>i love you always, my little baby makulit. 🧡</span>"
+        ];
+
+        var iSpeed = 50;
+        var iIndex = 0;
+        var iArrLength = aText[0].length;
+        var iTextPos = 0;
+        var sContents = "";
+        var iRow;
+
+        function typewriter() {
+            var destination = document.getElementById("typedtext");
+            sContents = "";
+            iRow = Math.max(0, iIndex);
+
+            for (var j = 0; j < iIndex; j++) {
+                sContents += "<p>" + aText[j] + "</p>";
+            }
+
+            sContents += "<p>" + aText[iIndex].substring(0, iTextPos) + "<span class='cursor'></span></p>";
+            destination.innerHTML = sContents;
+
+            if (iTextPos++ === iArrLength) {
+                iTextPos = 0;
+                iIndex++;
+                if (iIndex !== aText.length) {
+                    iArrLength = aText[iIndex].length;
+                    setTimeout(typewriter, 300);
+                }
+            } else {
+                setTimeout(typewriter, iSpeed);
+            }
+        }
+
+        typewriter();
+    </script>
+</body>
+</html>
