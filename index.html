@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Love</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Playfair+Display:wght@700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #fefaf6;
+            color: #444;
+            text-align: center;
+            overflow-x: hidden;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        .section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #fefaf6, #fff5ee);
+        }
+        .container {
+            max-width: 800px;
+            width: 90%;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: #e63946;
+            font-weight: 700;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+        p {
+            font-weight: 300;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .button-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .button {
+            display: inline-block;
+            background-color: #e63946;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
+        }
+        .button:hover {
+            background-color: #d62839;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(230, 57, 70, 0.4);
+        }
+        .gallery-container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+        }
+        .gallery {
+            max-width: 90%;
+            overflow-x: auto;
+            white-space: nowrap;
+            display: flex;
+            gap: 20px;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            padding: 20px 0;
+        }
+        .gallery img {
+            width: 300px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            scroll-snap-align: center;
+            flex-shrink: 0;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        .gallery::-webkit-scrollbar {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            p {
+                font-size: 1.2rem;
+            }
+            .gallery img {
+                width: 250px;
+                height: 350px;
+            }
+            .button-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .button {
+                width: 100%;
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const gallery = document.querySelector(".gallery");
+            gallery.addEventListener("wheel", function(event) {
+                event.preventDefault();
+                gallery.scrollLeft += event.deltaY * 0.3;
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="section">
+        <div class="container">
+            <h1>Welcome, My Love</h1>
+            <p>Our journey is a story of love, laughter, and unforgettable moments. Let’s cherish every step together. 💕</p>
+            <div class="button-container">
+                <a href="gallery.html" class="button">Gallery</a>
+                <a href="letters.html" class="button">Letters</a>
+                <a href="monthsarywen-main/index.html" class="button">More</a>
+                <a href="music/music.html" class="button">Music</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="gallery-container">
+        <div class="gallery">
+            <img src="images/image2.jpg" alt="Memory 1">
+            <img src="images/image3.jpg" alt="Memory 2">
+            <img src="images/image4.jpg" alt="Memory 3">
+            <img src="images/image5.jpg" alt="Memory 4">
+            <img src="images/image6.jpg" alt="Memory 5"> 
+        </div>
+    </div>
+</body>
+</html>

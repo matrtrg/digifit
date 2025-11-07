@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Carta</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .container {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 20px;
+            max-width: 100vw;
+            position: relative;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+
+        .container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrolling {
+            display: flex;
+            gap: 20px;
+            white-space: nowrap;
+            scroll-behavior: smooth;
+            padding-bottom: 10px;
+        }
+
+        .card {
+            position: relative;
+            width: 150px;
+            height: 225px;
+            border-radius: 15px;
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #fff;
+            cursor: pointer;
+            display: inline-block;
+            scroll-snap-align: start;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .face {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .face.back {
+            background: #fff;
+            color: #333;
+            font-size: 0.9em;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .face.front {
+            transition: 0.5s;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        }
+
+        .face.front b {
+            margin: 0;
+            padding: 0;
+            font-size: 2em;
+            color: #fff;
+            transition: 0.5s;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .card:hover .face.front {
+            height: 50px;
+        }
+
+        .card:hover .face.front b {
+            font-size: 0.8em;
+        }
+
+        .card:hover .face.back {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .card {
+                width: 120px;
+                height: 180px;
+            }
+
+            .face.front b {
+                font-size: 1.5em;
+            }
+
+            .face.back {
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>La Carta</h1>
+    <div class="container">
+        <div class="scrolling">
+            <div class="card"><a href="letters/letter1.html"><div class="face front" style="background-color: #fdfd96;"><b>Yellow</b></div><div class="face back">Happiness</div></a></div>
+            <div class="card"><a href="letters/letter2.html"><div class="face front" style="background-color: #ffb6c1;"><b>Pink</b></div><div class="face back">Kindness</div></a></div>
+            <div class="card"><a href="letters/letter3.html"><div class="face front" style="background-color: #ff6961;"><b>Red</b></div><div class="face back">Strenght</div></a></div>
+            <div class="card"><a href="letters/letter4.html"><div class="face front" style="background-color: #aec6cf;"><b>Blue</b></div><div class="face back">Smile</div></a></div>
+            <div class="card"><a href="letters/letter5.html"><div class="face front" style="background-color: #ffcc99;"><b>Orange</b></div><div class="face back">Continuation</div></a></div>
+            <div class="card"><a href="letters/letter6.html"><div class="face front" style="background-color: #cba6f7;"><b>Purple</b></div><div class="face back">A letter about creativity</div></a></div>
+            <div class="card"><a href="letters/letter7.html"><div class="face front" style="background-color: #77dd77;"><b>Green</b></div><div class="face back">A letter about growth</div></a></div>
+            <div class="card"><a href="letters/letter8.html"><div class="face front" style="background-color: #ffdf64;"><b>Gold</b></div><div class="face back">A letter about success</div></a></div>
+            <div class="card"><a href="letters/letter9.html"><div class="face front" style="background-color: #afeeee;"><b>Cyan</b></div><div class="face back">A letter about healing</div></a></div>
+            <div class="card"><a href="letters/letter10.html"><div class="face front" style="background-color: #d2b48c;"><b>Brown</b></div><div class="face back">A letter about stability</div></a></div>
+            <div class="card"><a href="letters/letter11.html"><div class="face front" style="background-color: #c0c0c0;"><b>Silver</b></div><div class="face back">A letter about wisdom</div></a></div>
+            <div class="card"><a href="letters/letter12.html"><div class="face front" style="background: linear-gradient(to right, #ff9aa2, #ffb7b2, #ffdac1, #e2f0cb, #b5ead7, #c7ceea);"><b>Rainbow</b></div><div class="face back">A letter about diversity</div></a></div>
+        </div>
+    </div>
+    <script>
+        document.querySelector('.container').addEventListener('wheel', (event) => {
+            event.preventDefault();
+            document.querySelector('.container').scrollBy({
+                left: event.deltaY * 2,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
