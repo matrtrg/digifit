@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Music Player</title>
+    <style>
+        body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(to right, #141e30, #243b55);
+    color: white;
+    flex-direction: column;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.player {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cover {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.title {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.controls button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    padding: 10px;
+}
+
+.controls button:hover {
+    transform: scale(1.1);
+}
+
+.lyrics-container {
+    margin-top: 20px;
+    max-height: 150px;
+    overflow-y: auto;
+    text-align: left;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.lyrics-line {
+    opacity: 0.5;
+    transition: opacity 0.3s;
+    margin: 5px 0;
+}
+
+.lyrics-line.active {
+    opacity: 1;
+    font-weight: bold;
+}
+
+/* Hide default audio controls */
+audio {
+    display: none;
+}
+
+.progress-container {
+    width: 100%;
+    background-color: #d3d3d3;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress {
+    background: #4caf50;
+    height: 5px;
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+.song-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    text-align: left;
+    width: 300px; /* Adjust width as needed */
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto;
+}
+
+.song-list li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.song-list li:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.song-list li.active {
+    background: rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+}
+
+
+/* Mobile-specific adjustments */
+@media (max-width: 480px) {
+    .cover {
+        width: 120px;
+        height: 120px;
+    }
+    .title {
+        font-size: 18px;
+    }
+    .controls button {
+        font-size: 28px;
+    }
+    .lyrics-container {
+        max-height: 100px;
+        font-size: 12px;
+    }
+    .progress-container {
+        height: 10px;
+    }
+    .progress {
+        height: 3px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="player">
+            <img id="cover" class="cover" src="" alt="Cover Image">
+            <h2 id="title">Song Title</h2>
+            <audio id="audio" ontimeupdate="updateLyrics()">
+                <source id="audio-source" src="" type="audio/mp3">
+            </audio>
+            <div class="progress-container" id="progress-container">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="controls">
+                <button onclick="prevSong()">⏮</button>
+                <button id="play-pause-btn" onclick="togglePlay()">▶</button>
+                <button onclick="nextSong()">⏭</button>
+            </div>
+            <div class="volume-control">
+                <span class="volume-icon">🔊</span>
+                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+            </div>
+            <div class="lyrics-container" id="lyrics-container"></div>
+        </div>
+        <ul class="song-list" id="song-list"></ul>
+    </div>
+      
+
+
+    
+    <script>
+        const audio = document.getElementById('audio');
+const audioSource = document.getElementById('audio-source');
+const lyricsContainer = document.getElementById('lyrics-container');
+const titleEl = document.getElementById('title');
+const coverEl = document.getElementById('cover');
+const playPauseBtn = document.getElementById('play-pause-btn');
+const progressContainer = document.getElementById('progress-container');
+const progress = document.getElementById('progress');
+const volumeSlider = document.getElementById('volume-slider');
+const songList = document.getElementById('song-list');
+
+const songs = [
+    {
+                title: "Die with a Smile by Bruno Mars",
+                src: "die.mp3",
+                cover: "dws.png",
+                lyrics: [
+                    { time: 4.15, text: "(Ooh, ooh)" },
+                    { time: 9.61, text: "I, I just woke up from a dream" },
+                    { time: 16.12, text: "Where you and I had to say goodbye" },
+                    { time: 20.85, text: "And I don't know what it all means" },
+                    { time: 25.25, text: "But since I survived, I realized" },
+                    { time: 29.26, text: "Wherever you go, that's where I'll follow" },
+                    { time: 34.65, text: "Nobody's promised tomorrow" },
+                    { time: 38.78, text: "So I'ma love you every night like it's the last night" },
+                    { time: 42.97, text: "Like it's the last night" },
+                    { time: 45.30, text: "If the world was ending" },
+                    { time: 48.18, text: "I'd wanna be next to you" },
+                    { time: 54.30, text: "If the party was over" },
+                    { time: 56.95, text: "And our time on Earth was through" },
+                    { time: 63.50, text: "I'd wanna hold you just for a while" },
+                    { time: 68.17, text: "And die with a smile" },
+                    { time: 72.70, text: "If the world was ending" },
+                    { time: 75.59, text: "I'd wanna be next to you" },
+                    { time: 81.50, text: "(Ooh, ooh)" },
+                    { time: 86.05, text: "Ooh, lost, lost in the words that we scream" },
+                    { time: 93.78, text: "I don't even wanna do this anymore" },
+                    { time: 98.12, text: "'Cause you already know what you mean to me" },
+                    { time: 101.90, text: "And our love's the only one worth fighting for" },
+                    { time: 107.30, text: "Wherever you go, that's where I'll follow" },
+                    { time: 111.97, text: "Nobody's promised tomorrow" },
+                    { time: 116.23, text: "So I'ma love you every night like it's the last night" },
+                    { time: 120.24, text: "Like it's the last night" },
+                    { time: 122.66, text: "If the world was ending" },
+                    { time: 125.67, text: "I'd wanna be next to you" },
+                    { time: 131.77, text: "If the party was over" },
+                    { time: 134.45, text: "And our time on Earth was through" },
+                    { time: 140.90, text: "I'd wanna hold you just for a while" },
+                    { time: 145.59, text: "And die with a smile" },
+                    { time: 149.92, text: "If the world was ending" },
+                    { time: 153.09, text: "I'd wanna be next to you" },
+                    { time: 158.52, text: "Right next to you" },
+                    { time: 163.36, text: "Next to you" },
+                    { time: 168.04, text: "Right next to you" },
+                    { time: 171.42, text: "Oh-oh" },
+                    { time: 190.72, text: "If the world was ending" },
+                    { time: 193.90, text: "I'd wanna be next to you" },
+                    { time: 200.09, text: "If the party was over" },
+                    { time: 202.82, text: "And our time on Earth was through" },
+                    { time: 208.97, text: "I'd wanna hold you just for a while" },
+                    { time: 213.79, text: "And die with a smile" },
+                    { time: 218.26, text: "If the world was ending" },
+                    { time: 221.20, text: "I'd wanna be next to you" },
+                    { time: 227.18, text: "If the world was ending" },
+                    { time: 230.29, text: "I'd wanna be next to you" },
+                    { time: 236.24, text: "(Ooh, ooh)" },
+                    { time: 239.30, text: "I'd wanna be next to you" }
+                ]
+            },
+            {
+        title: "Glue by Beabadoobee ft. Clairo",
+        src: "glue.mp3",
+        cover: "glue.jpg",
+        lyrics: [
+            { time: 12.52, text: "I've never known someone like you" },
+            { time: 18.90, text: "Tangled in love, stuck by you from the glue" },
+            { time: 25.26, text: "Don't forget to kiss me or else you'll have to miss me" },
+            { time: 31.12, text: "I guess I'm stuck forever by the glue, oh, and you" },
+            { time: 49.93, text: "You've been hiding in plain sight, and appeared, oh I know" },
+            { time: 56.65, text: "Loving you once only feels wrong, I need you" },
+            { time: 63.00, text: "I always knew I'd find you, to be here is worth the wait to" },
+            { time: 69.22, text: "I'm not lying when I say, 'I've been stuck by the glue onto you'" },
+            { time: 80.04, text: "I've been stuck by glue" },
+            { time: 86.90, text: "Right onto you" },
+            { time: 92.74, text: "I've been stuck by glue" },
+            { time: 101.02, text: "I've never known" },
+            { time: 107.27, text: "I've never known someone like you" },
+            { time: 113.81, text: "I've never known" },
+            { time: 120.13, text: "I've never known someone like you" }
+        ]
+    },
+            {
+                title: "Adore You",
+                src: "adoreyou.mp3",
+                cover: "adoreyou.png",
+                lyrics: [
+                    { time: 3.77, text: "Ah, ah" },
+                    { time: 7.22, text: "Hey (hey)" },
+                    { time: 12.97, text: "Ha-ah, oh, mmm" },
+                    { time: 17.84, text: "Baby, baby, yeah" },
+                    { time: 28.08, text: "Are you listening?" },
+                    { time: 31.81, text: "Wondering where you've been all my life" },
+                    { time: 43.94, text: "I just started livin'" },
+                    { time: 48.32, text: "Ooh-oh, baby" },
+                    { time: 56.62, text: "Are you listening? Uh" },
+                    { time: 64.77, text: "When you say you love me" },
+                    { time: 67.36, text: "Know I love you more" },
+                    { time: 71.46, text: "And when you say you need me" },
+                    { time: 75.22, text: "Know I need you more" },
+                    { time: 79.57, text: "Boy, I adore you-oo-ou" },
+                    { time: 87.42, text: "I adore you-oo-ou" },
+                    { time: 96.50, text: "Baby, when ya hear me" },
+                    { time: 103.73, text: "When I'm crying out for you" },
+                    { time: 111.52, text: "I'm scared, oh, so scared" },
+                    { time: 119.68, text: "But when you're near me" },
+                    { time: 123.59, text: "I feel like I'm standing with an army of men" },
+                    { time: 131.81, text: "Armed with weapons (weapons), hey, oh" },
+                    { time: 144.11, text: "When you say you love me" },
+                    { time: 147.23, text: "Know I love you more" },
+                    { time: 151.42, text: "And when you say you need me" },
+                    { time: 155.80, text: "Know I need you more" },
+                    { time: 159.39, text: "Boy, I adore you-oo-ou" },
+                    { time: 166.57, text: "I adore you-oo-ou" },
+                    { time: 175.27, text: "I love lying next to you" },
+                    { time: 182.54, text: "I could do this for eternity" },
+                    { time: 185.71, text: "You and me" },
+                    { time: 190.47, text: "We're meant to be in holy matrimony" },
+                    { time: 195.91, text: "God knew exactly what he was doing" },
+                    { time: 200.53, text: "When He led me to you" },
+                    { time: 206.45, text: "When you say you love me" },
+                    { time: 211.44, text: "Know I love you more (I love you more)" },
+                    { time: 215.11, text: "And when you say you need me" },
+                    { time: 218.86, text: "Know I need you more" },
+                    { time: 223.78, text: "Boy, I adore you-oo-ou" },
+                    { time: 232.14, text: "I adore you-oo-ou" },
+                    { time: 239.16, text: "When you say you love me" },
+                    { time: 242.66, text: "Know I love you more" },
+                    { time: 247.69, text: "And when you say you need me" },
+                    { time: 251.13, text: "Know I need you more" },
+                    { time: 255.86, text: "Boy, I adore you-oo-ou" },
+                    { time: 263.77, text: "I adore you-oo-ou" },
+                    { time: 270.00, text: "" }
+                ]
+            },
+        {
+                title: "Die with a Smile by Bruno Mars",
+                src: "../media/snow.mp3",
+                cover: "dws.png",
+                lyrics: [
+                    { time: 4.15, text: "(Ooh, ooh)" },
+                    { time: 9.61, text: "I, I just woke up from a dream" },
+                    { time: 16.12, text: "Where you and I had to say goodbye" },
+                    { time: 20.85, text: "And I don't know what it all means" },
+                    { time: 25.25, text: "But since I survived, I realized" },
+                    { time: 29.26, text: "Wherever you go, that's where I'll follow" },
+                    { time: 34.65, text: "Nobody's promised tomorrow" },
+                    { time: 38.78, text: "So I'ma love you every night like it's the last night" },
+                    { time: 42.97, text: "Like it's the last night" },
+                    { time: 45.30, text: "If the world was ending" },
+                    { time: 48.18, text: "I'd wanna be next to you" },
+                    { time: 54.30, text: "If the party was over" },
+                    { time: 56.95, text: "And our time on Earth was through" },
+                    { time: 63.50, text: "I'd wanna hold you just for a while" },
+                    { time: 68.17, text: "And die with a smile" },
+                    { time: 72.70, text: "If the world was ending" },
+                    { time: 75.59, text: "I'd wanna be next to you" },
+                    { time: 81.50, text: "(Ooh, ooh)" },
+                    { time: 86.05, text: "Ooh, lost, lost in the words that we scream" },
+                    { time: 93.78, text: "I don't even wanna do this anymore" },
+                    { time: 98.12, text: "'Cause you already know what you mean to me" },
+                    { time: 101.90, text: "And our love's the only one worth fighting for" },
+                    { time: 107.30, text: "Wherever you go, that's where I'll follow" },
+                    { time: 111.97, text: "Nobody's promised tomorrow" },
+                    { time: 116.23, text: "So I'ma love you every night like it's the last night" },
+                    { time: 120.24, text: "Like it's the last night" },
+                    { time: 122.66, text: "If the world was ending" },
+                    { time: 125.67, text: "I'd wanna be next to you" },
+                    { time: 131.77, text: "If the party was over" },
+                    { time: 134.45, text: "And our time on Earth was through" },
+                    { time: 140.90, text: "I'd wanna hold you just for a while" },
+                    { time: 145.59, text: "And die with a smile" },
+                    { time: 149.92, text: "If the world was ending" },
+                    { time: 153.09, text: "I'd wanna be next to you" },
+                    { time: 158.52, text: "Right next to you" },
+                    { time: 163.36, text: "Next to you" },
+                    { time: 168.04, text: "Right next to you" },
+                    { time: 171.42, text: "Oh-oh" },
+                    { time: 190.72, text: "If the world was ending" },
+                    { time: 193.90, text: "I'd wanna be next to you" },
+                    { time: 200.09, text: "If the party was over" },
+                    { time: 202.82, text: "And our time on Earth was through" },
+                    { time: 208.97, text: "I'd wanna hold you just for a while" },
+                    { time: 213.79, text: "And die with a smile" },
+                    { time: 218.26, text: "If the world was ending" },
+                    { time: 221.20, text: "I'd wanna be next to you" },
+                    { time: 227.18, text: "If the world was ending" },
+                    { time: 230.29, text: "I'd wanna be next to you" },
+                    { time: 236.24, text: "(Ooh, ooh)" },
+                    { time: 239.30, text: "I'd wanna be next to you" }
+                ]
+            }
+            
+];
+
+let currentSongIndex = 0;
+
+function loadSong(index) {
+    const song = songs[index];
+    titleEl.textContent = song.title;
+    coverEl.src = song.cover;
+    audioSource.src = song.src;
+    audio.load();
+    renderLyrics(song.lyrics);
+}
+
+function togglePlay() {
+    if (audio.paused) {
+        audio.play();
+        playPauseBtn.textContent = "⏸";
+    } else {
+        audio.pause();
+        playPauseBtn.textContent = "▶";
+    }
+}
+
+function renderLyrics(lyrics) {
+    lyricsContainer.innerHTML = lyrics.map(line => `
+        <div class="lyrics-line" data-time="${line.time}">${line.text}</div>
+    `).join('');
+}
+
+function updateLyrics() {
+    const currentTime = audio.currentTime;
+    const lines = document.querySelectorAll('.lyrics-line');
+    lines.forEach(line => {
+        const lineTime = parseFloat(line.getAttribute('data-time'));
+        if (currentTime >= lineTime) {
+            line.classList.add('active');
+        } else {
+            line.classList.remove('active');
+        }
+    });
+}
+
+function updateProgress() {
+    const { duration, currentTime } = audio;
+    const percent = (currentTime / duration) * 100;
+    progress.style.width = `${percent}%`;
+}
+
+function setProgress(e) {
+    const width = this.clientWidth;
+    const clickX = e.offsetX;
+    const duration = audio.duration;
+    audio.currentTime = (clickX / width) * duration;
+}
+
+function updateVolume() {
+    audio.volume = volumeSlider.value;
+}
+
+function prevSong() {
+    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    loadSong(currentSongIndex);
+}
+
+function nextSong() {
+    currentSongIndex = (currentSongIndex + 1) % songs.length;
+    loadSong(currentSongIndex);
+}
+
+function renderSongList() {
+    songList.innerHTML = songs.map((song, index) => `
+        <li data-index="${index}" onclick="selectSong(${index})">${song.title}</li>
+    `).join('');
+}
+
+function selectSong(index) {
+    currentSongIndex = index;
+    loadSong(currentSongIndex);
+    audio.play();
+    playPauseBtn.textContent = "⏸";
+}
+
+function highlightSong(index) {
+    const items = document.querySelectorAll('.song-list li');
+    items.forEach((item, i) => {
+        item.classList.toggle('active', i === index);
+    });
+}
+
+audio.addEventListener('timeupdate', updateProgress);
+progressContainer.addEventListener('click', setProgress);
+volumeSlider.addEventListener('input', updateVolume);
+
+loadSong(currentSongIndex);
+renderSongList();
+highlightSong(currentSongIndex);
+
+    </script>
+</body>
+</html>
