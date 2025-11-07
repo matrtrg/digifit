@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Media Gallery</title>
+    <link rel="stylesheet" href="gallery.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #ecf4fb;
+            text-align: center;
+        }
+        .gallery {
+            width: 90%;
+            margin: 50px auto;
+            column-count: auto;
+            column-width: 250px;
+            column-gap: 15px;
+        }
+        .gallery-item {
+            width: 100%;
+            margin-bottom: 15px;
+            break-inside: avoid;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .gallery img, .gallery video {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .gallery img:hover, .gallery video:hover {
+            transform: scale(1.05);
+        }
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .fullscreen img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        .gallery video {
+            pointer-events: auto;
+        }
+        .stop-button {
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .stop-button:hover {
+            background-color: #cc0000;
+        }
+        @media (max-width: 600px) {
+            .gallery {
+                column-count: 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery">
+        <div class="gallery-item"><video muted loop><source src="video1.mp4" type="video/mp4"></video></div>
+        <div class="gallery-item"><img src="images/image1.png" alt="Gallery Image 1" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image2.jpg" alt="Gallery Image 2" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><video muted loop><source src="video2.mp4" type="video/mp4"></video></div>
+        <div class="gallery-item"><img src="images/image3.jpg" alt="Gallery Image 3" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><video muted loop><source src="video3.mp4" type="video/mp4"></video></div>
+        <div class="gallery-item"><img src="images/image4.jpg" alt="Gallery Image 4" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image5.jpg" alt="Gallery Image 5" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image6.jpg" alt="Gallery Image 6" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image7.jpg" alt="Gallery Image 7" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image8.jpg" alt="Gallery Image 8" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image9.jpg" alt="Gallery Image 9" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image10.jpg" alt="Gallery Image 10" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image11.jpg" alt="Gallery Image 11" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image12.jpg" alt="Gallery Image 12" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><video muted loop><source src="video4.mp4" type="video/mp4"></video></div>
+        <div class="gallery-item"><img src="images/image13.jpg" alt="Gallery Image 13" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image14.jpg" alt="Gallery Image 14" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image15.jpg" alt="Gallery Image 15" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image16.jpg" alt="Gallery Image 16" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image17.jpg" alt="Gallery Image 17" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image18.jpg" alt="Gallery Image 18" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image19.jpg" alt="Gallery Image 19" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image20.jpg" alt="Gallery Image 20" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image21.jpg" alt="Gallery Image 21" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image22.jpg" alt="Gallery Image 22" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image23.jpg" alt="Gallery Image 23" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image24.jpg" alt="Gallery Image 24" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image25.jpg" alt="Gallery Image 25" onclick="openFullscreen(this)"></div>
+    </div>
+    <button class="stop-button" onclick="stopAllVideos()">Stop All Videos</button>
+    <div id="fullscreenViewer" class="fullscreen" style="display: none;" onclick="closeFullscreen()">
+        <img id="fullscreenImage" src="">
+    </div>
+    <script>
+        document.querySelectorAll("video").forEach(video => {
+            video.addEventListener("mouseenter", () => {
+                video.play();
+            });
+            video.addEventListener("mouseleave", () => {
+                video.pause();
+                video.currentTime = 0;
+            });
+            video.addEventListener("click", (e) => {
+                e.preventDefault();
+                if (video.paused) {
+                    video.muted = false;
+                    video.controls = true;
+                    video.play();
+                } else {
+                    video.pause();
+                    video.muted = true;
+                    video.controls = false;
+                }
+            });
+        });
+        function openFullscreen(img) {
+            document.getElementById("fullscreenImage").src = img.src;
+            document.getElementById("fullscreenViewer").style.display = "flex";
+        }
+        function closeFullscreen() {
+            document.getElementById("fullscreenViewer").style.display = "none";
+        }
+        function stopAllVideos() {
+            document.querySelectorAll("video").forEach(video => {
+                video.pause();
+                video.currentTime = 0;
+                video.muted = true;
+                video.controls = false;
+            });
+        }
+    </script>
+</body>
+</html>
