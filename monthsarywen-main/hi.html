@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delayed Image and Text</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #ffd1dc; /* Pastel pink background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        #content {
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 2s ease-in;
+        }
+
+        #content.show {
+            opacity: 1;
+        }
+
+        #image {
+            width: 500px; /* Adjust the width as needed */
+        }
+
+        #text {
+            font-size: 2em; /* Bigger text */
+            color: #ff1493; /* Deep pink text color */
+            text-shadow: 2px 2px #ff69b4; /* Pink shadow */
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <p id="text">HI BABYYYY</p>
+        <img id="image" src="images/hi.png" alt="Description of Image" width="500">
+        <p id="text">I LOVE YOU SO MUCH.</p>
+    </div>
+
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('content').classList.add('show');
+            }, 2000); // 2 seconds delay
+        };
+    </script>
+</body>
+</html>
