@@ -144,54 +144,75 @@ audio {
 
 /* Mobile-specific adjustments */
 @media (max-width: 480px) {
+    .container {
+        padding: 10px; /* Add padding for smaller screens */
+    }
+
     .cover {
         width: 120px;
         height: 120px;
     }
+
     .title {
         font-size: 18px;
     }
+
     .controls button {
         font-size: 28px;
     }
+
     .lyrics-container {
         max-height: 100px;
         font-size: 12px;
     }
+
     .progress-container {
         height: 10px;
     }
+
     .progress {
         height: 3px;
     }
+
+    .song-list {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+    }
+
+    .song-list li {
+        font-size: 14px;  /* Smaller text for the song list */
+    }
 }
+
 
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="player">
-            <img id="cover" class="cover" src="" alt="Cover Image">
-            <h2 id="title">Song Title</h2>
-            <audio id="audio" ontimeupdate="updateLyrics()">
-                <source id="audio-source" src="" type="audio/mp3">
-            </audio>
-            <div class="progress-container" id="progress-container">
-                <div class="progress" id="progress"></div>
-            </div>
-            <div class="controls">
-                <button onclick="prevSong()">⏮</button>
-                <button id="play-pause-btn" onclick="togglePlay()">▶</button>
-                <button onclick="nextSong()">⏭</button>
-            </div>
-            <div class="volume-control">
-                <span class="volume-icon">🔊</span>
-                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
-            </div>
-            <div class="lyrics-container" id="lyrics-container"></div>
+    <div class="player">
+        <img id="cover" class="cover" src="" alt="Cover Image">
+        <h2 id="title">Song Title</h2>
+        <audio id="audio" ontimeupdate="updateLyrics()">
+            <source id="audio-source" src="" type="audio/mp3">
+        </audio>
+        <div class="progress-container" id="progress-container">
+            <div class="progress" id="progress"></div>
         </div>
-        <ul class="song-list" id="song-list"></ul>
+        <div class="controls">
+            <button onclick="prevSong()">⏮</button>
+            <button id="play-pause-btn" onclick="togglePlay()">▶</button>
+            <button onclick="nextSong()">⏭</button>
+        </div>
+        <div class="volume-control">
+            <span class="volume-icon">🔊</span>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+        </div>
+        <div class="lyrics-container" id="lyrics-container"></div>
     </div>
+    <ul class="song-list" id="song-list"></ul>
+</div>
+
       
 
 
@@ -494,6 +515,7 @@ volumeSlider.addEventListener('input', updateVolume);
 
 loadSong(currentSongIndex);
 renderSongList();
+
 highlightSong(currentSongIndex);
 
     </script>
