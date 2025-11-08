@@ -25,6 +25,33 @@ h1 {
 }
 section { padding: 40px 0; transition: background 1s ease; }
 
+/* ===== MOBILE RESPONSIVENESS ===== */
+@media (max-width: 768px) {
+  h1 { font-size: 1.8em; margin: 20px 0; }
+  .card { width: 120px; height: 180px; }
+  .face.front b { font-size: 1.5em; }
+  .face.back { font-size: 0.8em; }
+  .envelope { width: 230px; height: 180px; }
+  .letter { width: 60%; right: 18%; }
+  .gallery { column-count: 2; column-gap: 10px; }
+  .stop-button { width: 80%; font-size: 14px; }
+  #letter-container { width: 95%; padding: 15px; font-size: 0.9em; }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 1.5em; }
+  .card { width: 100px; height: 150px; }
+  .face.front b { font-size: 1.2em; }
+  .gallery { column-count: 1; }
+}
+
+@media (max-width: 360px) {
+    .envelope { width: 200px; height: 160px; }
+    .letter { width: 65%; right: 15%; height: 75%; padding: 10px; }
+    .gallery { column-count: 1; column-gap: 8px; }
+}
+
+
 /* ===== LA CARTA SECTION ===== */
 #cards-section {
     background: linear-gradient(135deg, #fdfd96, #ffb6c1, #aec6cf);
@@ -240,14 +267,13 @@ section { padding: 40px 0; transition: background 1s ease; }
     z-index: 2000;
     justify-content: center;
     align-items: center;
-    padding: 15px;
 }
 #letter-container {
-    width: 100%;
+    width: 80%;
     max-width: 600px;
-    max-height: 90vh;
+    max-height: 80vh;
     background: #fff;
-    padding: 20px 15px 15px 15px;
+    padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     border: 1px solid #fbc02d;
@@ -255,26 +281,9 @@ section { padding: 40px 0; transition: background 1s ease; }
     text-align: left;
     position: relative;
     overflow-y: auto;
-    animation: fadeIn 0.5s ease-in-out;
+    animation: fadeIn 1s ease-in-out;
 }
-#letter-container button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #ff4d4d;
-    color: white;
-    border: none;
-    font-size: 28px;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-#letter-container button:active { background-color: #cc0000; }
-#typedtext p { margin:10px 0; text-indent:20px; font-size: 16px; }
+#typedtext p { margin:10px 0; text-indent:30px; }
 .cursor {
     display: inline-block;
     width: 8px;
@@ -286,11 +295,6 @@ section { padding: 40px 0; transition: background 1s ease; }
 @keyframes blink { 0% {opacity:1;} 50% {opacity:0;} 100% {opacity:1;} }
 @keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
 
-@media (max-width: 480px) {
-    #typedtext p { font-size: 14px; text-indent:15px; }
-    #letter-container { padding: 15px 10px 10px 10px; }
-    #letter-container button { width: 40px; height: 40px; font-size: 24px; top:5px; right:5px; }
-}
 </style>
 </head>
 <body>
@@ -345,7 +349,6 @@ section { padding: 40px 0; transition: background 1s ease; }
 <!-- LETTER OVERLAY -->
 <div id="overlay">
     <div id="letter-container">
-        <button id="closeLetter">&times;</button>
         <div id="typedtext"></div>
     </div>
 </div>
@@ -397,12 +400,84 @@ const overlay = document.getElementById('overlay');
 const overlayColors = {
     yellow: "#fdfd96",
     pink: "#ffb6c1",
-    red: "#ff6961",
-    blue: "#4285F4"
+    red: "#ff6961"
 };
 
-// Letters data here (same as before, omitted for brevity, include your lettersData variable)
-const lettersData = {}; // Include your full lettersData object here
+const lettersData = {
+    yellow: [
+        "9/20/2024",
+        "Hi love! This letter is for the things I admire most about you—",
+        "Your loving heart, not just for others, but also for yourself.",
+        "Alam mo ba kung gaano kaganda ang puso mo? Yung lambing mo, pag-aalaga mo, at ang pagmamahal mo sa ibang tao are the things i love about you.",
+        "but the one thing i love the most about you, ay yung hindi mo pagkalimot mahalin at respetuhin ang sarili mo.",
+        "You know your worth, and you never let anyone take that away from you.",
+        "You love deeply, but you never lose yourself in the process",
+        "At yan ang isa sa pinakamahalagang bagay na natutunan ko mula sa’yo.",
+        "There’s something so beautiful about the way you carry yourself, how you stay kind but firm,",
+        "how you give so much love pero hindi mo hinahayaang maubos ka.",
+        "That’s what makes you so amazing, love.",
+        "Kaya please, never stop being the strong, loving person that you are.",
+        "Always remember that I see you, I appreciate you, and I’ll always remind you how worthy you are.",
+        "Kahit anong mangyari, nandito lang ako para ipaalala sa’yo na mahalaga ka, hindi lang sa akin, kundi sa buong mundo.",
+        "<span style='color:#fbc02d; font-size: 22px; font-weight: bold;'>Mahal kita sobra, love. Keep shining! ❤</span>"
+    ],
+    pink: [
+        "9/29/2024",
+        "Hi love. This letter is all about your <span style='color:#ff4081; font-weight:bold;'>kindness</span>.",
+        "I want to start this letter by going back to the first time we talked.",
+        "I know we started off having this <span style='color:#ff1493;'>kalog energy</span> and flirting type,",
+        "pero dun palang I can already see how <span style='color:#ff4081;'>kind</span> you are po.",
+        "Habang tumatagal yung relationship natin and mas nakikilala kita,",
+        "mas nakikita ko yung warmth sa words mo and the way you choose them so carefully,",
+        "as if you always want to make others feel <span style='color:#ff69b4;'>understood</span> and <span style='color:#ff69b4;'>valued</span>.",
+        "You have this quiet yet profound way of showing kindness that leaves a mark",
+        "on everyone you meet, including me.",
+        "",
+        "I’ve seen how <span style='color:#ff4081;'>kind</span> you are not just to others, but to yourself too,",
+        "how you find balance between what’s <span style='color:#ff69b4;'>right</span> and <span style='color:#ff69b4;'>wrong</span>,",
+        "and how you always strive to do what’s <span style='color:#ff1493;'>better</span> and <span style='color:#ff1493;'>best</span>.",
+        "Even when it’s hard, even when others don’t make it easy,",
+        "you still manage to stay <span style='color:#ff4081;'>patient</span> and <span style='color:#ff4081;'>loving</span>, and true to yourself hihi.",
+        "I’m so <span style='color:#ff4081;'>proud</span> of you love, and I feel so lucky to be loved",
+        "by someone as wonderful as you.",
+        "<span style='color:#ff1493; font-size: 22px; font-weight: bold;'>ILOVEEEYOUSOMUCCCHH ❤</span>"
+    ],
+    red: [
+        "10/05/2024",
+        "Hi love. This letter is all about your <span style='color:#ff4081; font-weight:bold;'>strength</span>.",
+        "Gusto kong simulan ‘to by looking back sa mga moments na nakita kong gaano ka katatag.",
+        "Sa simula pa lang, I already noticed your <span style='color:#ff1493;'>resilience</span>—yung paraan mo ng pagharap sa kahit anong challenge with a smile and a strong heart.",
+        "Napansin ko kung paano mo hinaharap yung mga problema mo, hindi lang basta para matapos na, kundi para talaga matuto at maging <span style='color:#ff4081;'>better</span>.",
+        "Habang mas nakikilala kita, mas lalo kong na-appreciate yung tapang mo.",
+        "You don’t just endure things, you rise above them.",
+        "Your words, your actions, and even the way you handle tough days, they all show how <span style='color:#ff69b4;'>strong</span> you truly are.",
+        "Pero love, hindi lang naman about struggles ang strength mo—nakikita ko rin ito sa way mo magmahal, magbigay, at magpahalaga.",
+        "I love how you choose to be <span style='color:#ff1493;'>hopeful</span> kahit na mahirap,",
+        "paano mo pinipiling maging <span style='color:#ff4081;'>kind</span> kahit minsan unfair ang mundo,",
+        "at paano mo pinaninindigan kung ano ang tama at <span style='color:#ff69b4;'>totoo</span>, kahit challenging.",
+        "And that’s one of the million reasons why I admire you so much.",
+        "Ang sarap mong mahalin, love. And I want you to know na kahit anong mangyari,",
+        "nandito ako, always ready to remind you how <span style='color:#ff1493;'>amazing</span> and <span style='color:#ff4081;'>strong</span> you are.",
+        "Super <span style='color:#ff4081;'>proud</span> ako sa’yo, love. And I’m beyond grateful na ikaw ang minamahal ko.",
+        "<span style='color:#ff1493; font-size: 22px; font-weight: bold;'>ILOVEEEYOUSOMUCCCHH ❤</span>"
+    ],
+    blue: [
+    "10/07/2024",
+    "Hi love. This is the fourth letter, and the color <span style='color:#4285F4; font-weight:bold;'>blue</span> represents your smile.",
+    "Every time you smile, it reminds me of a beautiful day with a sky-blue sky—",
+    "a feeling of <span style='color:#4285F4;'>soothing calmness</span> and a sense of <span style='color:#4285F4;'>safety</span>.",
+    "Simula pa lang nung una kitang nakita na nakangiti, alam ko na sa sarili ko,",
+    "I want to keep that <span style='color:#4285F4;'>smile</span> on your face and protect it.",
+    "Your smile has this way of making everything feel <span style='color:#4285F4;'>lighter</span> and <span style='color:#4285F4;'>brighter</span>.",
+    "Parang kahit anong bigat ng mundo, isang ngiti mo lang, gumagaan ang lahat.",
+    "Hindi mo lang alam kung gaano ito kahalaga sa akin, kung paano nito naaapektuhan ang buong araw ko.",
+    "Kaya love, please keep smiling, not just for me, but for yourself too.",
+    "You deserve to feel <span style='color:#4285F4;'>happy</span> and <span style='color:#4285F4;'>free</span>, just like the sky on the clearest day.",
+    "At kahit ano pa ang mangyari, nandito lang ako, ready to do anything just to keep that beautiful <span style='color:#4285F4;'>smile</span> on your face.",
+    "<span style='color:#4285F4; font-size: 22px; font-weight: bold;'>ILOVEEEYOUSOMUCCCHH ❤</span>"
+    ]
+
+};
 
 function startTypewriter(aText) {
     let iSpeed = 50, iIndex = 0, iArrLength = aText[0].length, iTextPos = 0, sContents = "", iRow;
@@ -413,7 +488,6 @@ function startTypewriter(aText) {
         iRow = Math.max(0, iIndex);
         for (let j = 0; j < iIndex; j++) { sContents += "<p>" + aText[j] + "</p>"; }
         sContents += "<p>" + aText[iIndex].substring(0, iTextPos) + "<span class='cursor'></span></p>";
-
         destination.innerHTML = sContents;
 
         if (iTextPos++ === iArrLength) {
@@ -439,11 +513,6 @@ document.querySelectorAll('.card').forEach(card => {
 // Close overlay on click outside letter container
 overlay.addEventListener('click', (e) => {
     if(e.target === overlay){ overlay.style.display = 'none'; }
-});
-
-// Close button logic
-document.getElementById('closeLetter').addEventListener('click', () => {
-    overlay.style.display = 'none';
 });
 </script>
 
