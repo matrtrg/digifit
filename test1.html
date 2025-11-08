@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Carta — Envelope & Gallery</title>
+<iframe width="0" height="0" src="music/AdoreYou.mp3" frameborder="0" allowfullscreen></iframe>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    overflow-x: hidden;
+}
+h1 {
+    font-size: 2.5em;
+    margin: 40px 0 20px 0;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+}
+section { padding: 40px 0; transition: background 1s ease; }
+
+/* ===== LA CARTA SECTION ===== */
+#cards-section {
+    background: linear-gradient(135deg, #fdfd96, #ffb6c1, #aec6cf);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+#cards-section .container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 20px;
+    max-width: 100vw;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+#cards-section .container::-webkit-scrollbar { display: none; }
+.scrolling { display: flex; gap: 20px; white-space: nowrap; scroll-behavior: smooth; padding-bottom: 10px; }
+.card {
+    position: relative;
+    width: 150px;
+    height: 225px;
+    border-radius: 15px;
+    box-shadow: 0 15px 60px rgba(0,0,0,0.2);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #fff;
+    cursor: pointer;
+    display: inline-block;
+    scroll-snap-align: start;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+}
+.card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+.face {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.face.back {
+    background: #fff;
+    color: #333;
+    font-size: 0.9em;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.face.front {
+    transition: 0.5s;
+    border-radius: 15px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+}
+.face.front b { margin: 0; font-size: 2em; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+.card:hover .face.front { height: 50px; }
+.card:hover .face.front b { font-size: 0.8em; }
+.card:hover .face.back { opacity: 1; }
+
+@media (max-width: 768px) {
+    h1 { font-size: 2em; }
+    .card { width: 120px; height: 180px; }
+    .face.front b { font-size: 1.5em; }
+    .face.back { font-size: 0.8em; }
+}
+
+/* ===== ENVELOPE SECTION ===== */
+#envelope-section {
+    background: linear-gradient(180deg, #b0e57c, #ecf4fb);
+    display: grid;
+    place-items: center;
+    height: 100vh;
+}
+.envelope-wrapper {
+    background: #f5edd1;
+    box-shadow: 0 0 40px rgba(0,0,0,0.2);
+    position: relative;
+}
+.envelope {
+    position: relative;
+    width: 300px;
+    height: 230px;
+}
+.envelope::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    border-top: 130px solid #ecdeb8;
+    border-right: 150px solid transparent;
+    border-left: 150px solid transparent;
+    transform-origin: top;
+    transition: all 0.5s ease-in-out 0.7s;
+}
+.envelope::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    width: 0px;
+    height: 0px;
+    border-top: 130px solid transparent;
+    border-right: 150px solid #e6cfa7;
+    border-bottom: 100px solid #e6cfa7;
+    border-left: 150px solid #e6cfa7;
+}
+.letter {
+    position: absolute;
+    right: 20%;
+    bottom: 0;
+    width: 54%;
+    height: 80%;
+    background: #fff;
+    text-align: center;
+    transition: all 1s ease-in-out;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    padding: 20px 10px;
+}
+.letter .text { color: #444; text-align: left; font-size: 10px; }
+.heart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15px;
+    height: 15px;
+    background: rgb(252, 8, 231);
+    z-index: 4;
+    transform: translate(-50%, -20%) rotate(45deg);
+    transition: transform 0.5s ease-in-out 1s;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+.heart:before, .heart:after {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: rgb(252, 8, 231);
+    border-radius: 50%;
+}
+.heart:before { top: -7.5px; }
+.heart:after { right: 7.5px; }
+.flap .envelope::before { transform: rotateX(180deg); z-index: 0; }
+.flap .envelope .letter { bottom: 100px; transform: scale(1.5); transition-delay: 1s; }
+.flap .heart { transform: rotate(90deg); transition-delay: 0.4s; }
+
+/* ===== GALLERY SECTION ===== */
+#gallery-section { background: linear-gradient(180deg, #ecf4fb, #fff); text-align: center; }
+.gallery {
+    width: 90%;
+    margin: 50px auto;
+    column-count: auto;
+    column-width: 250px;
+    column-gap: 15px;
+}
+.gallery-item {
+    width: 100%;
+    margin-bottom: 15px;
+    break-inside: avoid;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.gallery img, .gallery video {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.gallery img:hover, .gallery video:hover { transform: scale(1.05); }
+.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.fullscreen img { max-width: 90%; max-height: 90%; }
+.stop-button {
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.stop-button:hover { background-color: #cc0000; }
+@media (max-width: 600px) { .gallery { column-count: 2; } }
+
+/* ===== LETTER OVERLAY ===== */
+#overlay {
+    display: none;
+    position: fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    background: rgba(0,0,0,0.8);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+#letter-container {
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    background: #fff;
+    padding: 20px 15px 15px 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: 1px solid #fbc02d;
+    line-height: 1.8;
+    text-align: left;
+    position: relative;
+    overflow-y: auto;
+    animation: fadeIn 0.5s ease-in-out;
+}
+#letter-container button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    font-size: 28px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#letter-container button:active { background-color: #cc0000; }
+#typedtext p { margin:10px 0; text-indent:20px; font-size: 16px; }
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 18px;
+    background: #fbc02d;
+    margin-left: 5px;
+    animation: blink 0.8s infinite;
+}
+@keyframes blink { 0% {opacity:1;} 50% {opacity:0;} 100% {opacity:1;} }
+@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+
+@media (max-width: 480px) {
+    #typedtext p { font-size: 14px; text-indent:15px; }
+    #letter-container { padding: 15px 10px 10px 10px; }
+    #letter-container button { width: 40px; height: 40px; font-size: 24px; top:5px; right:5px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LA CARTA SECTION -->
+<section id="cards-section">
+    <h1>La Carta</h1>
+    <div class="container">
+        <div class="scrolling">
+            <a class="card" data-letter="yellow"><div class="face front" style="background-color:#fdfd96;"><b>Yellow</b></div><div class="face back">Happiness</div></a>
+            <a class="card" data-letter="pink"><div class="face front" style="background-color:#ffb6c1;"><b>Pink</b></div><div class="face back">Kindness</div></a>
+            <a class="card" data-letter="red"><div class="face front" style="background-color:#ff6961;"><b>Red</b></div><div class="face back">Strength</div></a>
+            <a class="card" data-letter="blue"><div class="face front" style="background-color:#4285F4;"><b>Blue</b></div><div class="face back">Smile</div></a>
+        </div>
+    </div>
+</section>
+
+<!-- ENVELOPE SECTION -->
+<section id="envelope-section">
+    <div class="envelope-wrapper">
+        <div class="envelope">
+            <div class="letter">
+                <div class="text">
+                    <strong>Dear Love.</strong><br>
+                    <strong>Oct/12/2024.</strong>
+                    <p>Hi love, thank you for everything — your smile, kindness, and love that brighten my world every day. ❤️</p>
+                </div>
+            </div>
+        </div>
+        <div class="heart"></div>
+    </div>
+</section>
+
+<!-- GALLERY SECTION -->
+<section id="gallery-section">
+    <h1>Our Memories</h1>
+    <div class="gallery">
+        <div class="gallery-item"><video muted loop><source src="video1.mp4" type="video/mp4"></video></div>
+        <div class="gallery-item"><img src="images/image1.png" alt="Gallery Image 1" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><img src="images/image2.jpg" alt="Gallery Image 2" onclick="openFullscreen(this)"></div>
+        <div class="gallery-item"><video muted loop><source src="video2.mp4" type="video/mp4"></video></div>
+        <div class="gallery-item"><img src="images/image3.jpg" alt="Gallery Image 3" onclick="openFullscreen(this)"></div>
+    </div>
+    <button class="stop-button" onclick="stopAllVideos()">Stop All Videos</button>
+</section>
+
+<!-- FULLSCREEN IMAGE VIEW -->
+<div id="fullscreenViewer" class="fullscreen" style="display:none;" onclick="closeFullscreen()">
+    <img id="fullscreenImage" src="">
+</div>
+
+<!-- LETTER OVERLAY -->
+<div id="overlay">
+    <div id="letter-container">
+        <button id="closeLetter">&times;</button>
+        <div id="typedtext"></div>
+    </div>
+</div>
+
+<script>
+// Scroll La Carta horizontally
+document.querySelector('#cards-section .container').addEventListener('wheel', (event) => {
+    event.preventDefault();
+    event.currentTarget.scrollBy({ left: event.deltaY * 2, behavior: 'smooth' });
+});
+
+// Envelope Open Animation + Smooth Scroll
+const envelope = document.querySelector('.envelope-wrapper');
+envelope.addEventListener('click', () => {
+    envelope.classList.toggle('flap');
+    if (envelope.classList.contains('flap')) {
+        setTimeout(() => {
+            document.getElementById('gallery-section').scrollIntoView({ behavior: 'smooth' });
+        }, 1800);
+    }
+});
+
+// Gallery Logic
+document.querySelectorAll("video").forEach(video => {
+    video.addEventListener("mouseenter", () => video.play());
+    video.addEventListener("mouseleave", () => { video.pause(); video.currentTime = 0; });
+    video.addEventListener("click", e => {
+        e.preventDefault();
+        if(video.paused){ video.muted=false; video.controls=true; video.play(); }
+        else{ video.pause(); video.muted=true; video.controls=false; }
+    });
+});
+function openFullscreen(img) {
+    document.getElementById("fullscreenImage").src = img.src;
+    document.getElementById("fullscreenViewer").style.display = "flex";
+}
+function closeFullscreen() { document.getElementById("fullscreenViewer").style.display = "none"; }
+function stopAllVideos() {
+    document.querySelectorAll("video").forEach(video => {
+        video.pause();
+        video.currentTime = 0;
+        video.muted = true;
+        video.controls = false;
+    });
+}
+
+// ===== LETTER OVERLAY LOGIC =====
+const overlay = document.getElementById('overlay');
+const overlayColors = {
+    yellow: "#fdfd96",
+    pink: "#ffb6c1",
+    red: "#ff6961",
+    blue: "#4285F4"
+};
+
+// Letters data here (same as before, omitted for brevity, include your lettersData variable)
+const lettersData = {}; // Include your full lettersData object here
+
+function startTypewriter(aText) {
+    let iSpeed = 50, iIndex = 0, iArrLength = aText[0].length, iTextPos = 0, sContents = "", iRow;
+    const destination = document.getElementById("typedtext");
+
+    function typewriter() {
+        sContents = "";
+        iRow = Math.max(0, iIndex);
+        for (let j = 0; j < iIndex; j++) { sContents += "<p>" + aText[j] + "</p>"; }
+        sContents += "<p>" + aText[iIndex].substring(0, iTextPos) + "<span class='cursor'></span></p>";
+
+        destination.innerHTML = sContents;
+
+        if (iTextPos++ === iArrLength) {
+            iTextPos = 0; iIndex++;
+            if (iIndex !== aText.length) { iArrLength = aText[iIndex].length; setTimeout(typewriter, 300); }
+        } else { setTimeout(typewriter, iSpeed); }
+    }
+    typewriter();
+}
+
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+        const letterKey = card.dataset.letter;
+        if (lettersData[letterKey]) {
+            overlay.style.display = 'flex';
+            document.getElementById('letter-container').style.background = overlayColors[letterKey];
+            document.getElementById('typedtext').innerHTML = '';
+            startTypewriter(lettersData[letterKey]);
+        }
+    });
+});
+
+// Close overlay on click outside letter container
+overlay.addEventListener('click', (e) => {
+    if(e.target === overlay){ overlay.style.display = 'none'; }
+});
+
+// Close button logic
+document.getElementById('closeLetter').addEventListener('click', () => {
+    overlay.style.display = 'none';
+});
+</script>
+
+</body>
+</html>
